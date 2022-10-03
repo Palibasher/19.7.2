@@ -1,5 +1,5 @@
 import sys
-sys.path.append(r"C:\\Users\\brick\\PycharmProjects\\pytest_first_test\\venv\\pract\\Api_Test_19.4")
+sys.path.append(r"C:\\Users\\brick\\PycharmProjects\\pytest_first_test\\venv\\pract\\Api_Test_19.7.2")
 from settings import valid_email, valid_password, valid_email_2
 from api import PetFriends
 from random import randint
@@ -32,7 +32,7 @@ def test_add_new_pet_with_valid_data(email=valid_email, password=valid_password)
     status, result = pf.get_api_key(email, password)
     auth_key = result["key"]
     name, animal_type, age = "Вадим Вадимыч", "Птица", "1"
-    status_add, result_add = pf.add_new_pet(auth_key, name, animal_type, age, "images/217.jpg")
+    status_add, result_add = pf.add_new_pet(auth_key, name, animal_type, age, "tests/images/217.jpg")
     assert status_add == 200
     assert type(result_add) == dict
     assert result_add["name"] == name
@@ -75,7 +75,7 @@ def test_add_new_photo_by_pet_id(email=valid_email, password=valid_password):
     auth_key = result["key"]
     params = {"filter": "my_pets"}
     first_pet_id = pf.get_id_of_first_pet_on_the_list(auth_key, params=params)
-    ph_add_status = pf.add_photo_of_pet_with_valid_id(auth_key, first_pet_id, "images/111.jpg")
+    ph_add_status = pf.add_photo_of_pet_with_valid_id(auth_key, first_pet_id, "tests/images/111.jpg")
     assert ph_add_status == 200
 
 def test_update_pet_information_by_pet_id(email=valid_email, password=valid_password):
@@ -110,7 +110,7 @@ def test_negative_add_new_pet_with_invalid_authkey(email=valid_email, password=v
     """Тест проверяет возможность добавить питомца с неверным ключом авторизации"""
     auth_key = "qwertyqwertyqwertyqwertyqwertyqwerty"
     name, animal_type, age = "Вовка", "Верблюд", "12"
-    status_add, result_add = pf.add_new_pet(auth_key, name, animal_type, age, "images/217.jpg")
+    status_add, result_add = pf.add_new_pet(auth_key, name, animal_type, age, "tests/images/217.jpg")
     assert status_add == 403
 
 def test_negative_try_add_new_pet_with_incomplite_data(email = valid_email, password = valid_password):
@@ -126,7 +126,7 @@ def test_negative_try_add_pet_with_negative_age(email=valid_email, password=vali
     status, result = pf.get_api_key(email, password)
     auth_key = result["key"]
     name, animal_type, age = "Я еще не родился", "Кто-то", "-1"
-    status_add, result_add = pf.add_new_pet(auth_key, name, animal_type, age, "images/9.jpg")
+    status_add, result_add = pf.add_new_pet(auth_key, name, animal_type, age, "tests/images/9.jpg")
     assert status_add != 200
 
 def test_negative_add_new_pet_with_name_that_too_long(email=valid_email, password=valid_password):
@@ -135,7 +135,7 @@ def test_negative_add_new_pet_with_name_that_too_long(email=valid_email, passwor
     auth_key = result["key"]
     name = "".join([chr(randint(65,90)) for i in range(100000)])
     animal_type, age =  "Ошибка", "1"
-    status_add, result_add = pf.add_new_pet(auth_key, name, animal_type, age, "images/long.jpg")
+    status_add, result_add = pf.add_new_pet(auth_key, name, animal_type, age, "tests/images/long.jpg")
     assert status_add != 200
 
 def test_negative_delete_pet_by_pet_id_by_other_user(email=valid_email, password=valid_password, email2 = valid_email_2):
@@ -146,7 +146,7 @@ def test_negative_delete_pet_by_pet_id_by_other_user(email=valid_email, password
     auth_key2 = result["key"]
     ## добавляем питомца побочного пользователя
     name, animal_type, age = "Saul Goodman", "Lawyer", "47"
-    status_add, result_add = pf.add_new_pet(auth_key2, name, animal_type, age, "images/500.jpg")
+    status_add, result_add = pf.add_new_pet(auth_key2, name, animal_type, age, "tests/images/500.jpg")
     params = {"filter": "my_pets"}
     ## Берем id питомца из списка питомцев побочного пользователя
     first_pet_id = pf.get_id_of_first_pet_on_the_list(auth_key2, params=params)
